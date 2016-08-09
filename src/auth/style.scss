@@ -1,8 +1,150 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+@font-face {
+    font-family: 'GreatVibes-Regular';
+    src: url("./GreatVibes-Regular.ttf") format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
-a {
-  color: #00B7FF;
+@mixin default-button {
+  display: block;
+  font-size: 20px;
+  text-align: center;
+  padding:5px;
+  background: #00f;
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  cursor: pointer;
+  &:active {
+    background-color: #00d;
+  }
+}
+
+body {
+  background-color: #00ffff;
+  color: white;
+  font: 16px Helvetica, Arial, sans-serif;
+}
+
+#root {
+  min-width: 320px;
+  max-width: 768px;
+  padding: 20px;
+  margin: auto;
+  #auth-buttons {
+    float: right;
+    a {
+      margin: 10px;
+      padding:5px;
+      background: #00f;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      &:active {
+        background-color: #00d;
+      }
+    }
+  }
+  header {
+    &:after{
+      display: block;
+      clear: both;
+      content: '';
+    }
+  }
+  h1 {
+    font-family: GreatVibes-Regular;
+    text-align: center;
+    margin: auto;
+    margin-top: 20px;
+    font-size: 70px;
+  }
+  p {
+    font-weight: bolder;
+    max-width: 70%;
+    min-width: 290px;
+    margin: 20px auto;
+  }
+  input {
+    display: block;
+    min-width: 70%;
+    margin: 20px auto;
+    height: 28px;
+    font-size: 20px;
+  }
+  input[type="file"] {
+    display: none;
+  }
+  select {
+    display: block;
+    min-width: 70%;
+    margin: 20px auto;
+    height: 28px;
+    font-size: 20px;
+  }
+  textarea {
+    display: block;
+    margin: 20px auto;
+    min-width: 70%;
+    font-size: 20px;
+    height: 100px;
+  }
+  nav {
+    max-width: 70%;
+    margin: auto;
+    a {
+      @include default-button;
+      width: 80px;
+      &.left {
+        float: left;
+      }
+      &.right {
+        float: right;
+      }
+    }
+    &:after{
+      display: block;
+      clear: both;
+      content: '';
+    }
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+#avatar img{
+  display: block;
+  height: 100px;
+  width: 100px;
+  border-radius: 50px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-image: none;
+  border: none;
+  margin: 20px auto;
+  &:active {
+    height: 96px;
+    width: 96px;
+    border: 2px solid #0ee;
+  }
+}
+
+.minLink {
+  text-align: center;
+  margin:20px auto;
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.default-button {
+  @include default-button;
 }

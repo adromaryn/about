@@ -52,32 +52,40 @@ module.exports ={
 
     preloaders: [
       {
+        test:	/\.jsx?$/,
         loader: 'eslint',
         include: [
           path.resolve(__dirname,	"src")
-        ],
-        test:	/\.jsx?$/
+        ]
       }
     ],
 
     loaders: [
       {
+        test: /\.jsx?$/,
         loader: 'babel',
         include: [
           path.resolve(__dirname,	"src")
         ],
-        test: /\.jsx?$/,
         query: {
           cacheDirectory: true
         }
       },
       {
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader"),
-        test: /\.css$/
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract("style-loader", "css-loader")
       },
       {
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader"),
-        test: /\.scss$/
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader")
+      },
+      {
+        test: /\.(jpe?g|png|gif)$/i,
+        loader: 'file?hash=sha512&digest=hex&name=[hash].[ext]'
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader'
       }
     ]
   }
