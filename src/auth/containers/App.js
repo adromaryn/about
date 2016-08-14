@@ -1,3 +1,5 @@
+"use strict";
+
 import	React,	{	Component	}	from	'react'
 import	{	bindActionCreators	}	from	'redux'
 import	{	connect	}	from	'react-redux'
@@ -7,6 +9,7 @@ import	*	as	loginActions	from	'../actions/LoginActions'
 import	*	as	registrationActions	from	'../actions/RegistrationActions'
 
 export	default	class	App	extends	Component	{
+
   render()	{
 
     var children;
@@ -15,7 +18,7 @@ export	default	class	App	extends	Component	{
       children = React.cloneElement(
         this.props.children,
         {
-          login: this.props.login.login,
+          nick: this.props.login.login,
           password: this.props.login.passwordLogin,
           setLogin: this.props.loginActions.setLogin,
           setPassword: this.props.loginActions.setPassword
@@ -28,6 +31,7 @@ export	default	class	App	extends	Component	{
           nick: this.props.registration.nick,
           password: this.props.registration.password,
           confirmation: this.props.registration.passwordConfirmation,
+          question: this.props.registration.question,
           yourQVisible: this.props.registration.yourQVisible,
           yourQuestion: this.props.registration.yourQuestion,
           answer: this.props.registration.answer,

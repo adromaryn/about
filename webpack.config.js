@@ -34,7 +34,11 @@ module.exports ={
     new webpack.optimize.CommonsChunkPlugin({
       name: "common",
       minChunks: 2
-    }),
+    }),/*
+    new webpack.ProvidePlugin({
+      'Promise': 'es6-promise',
+      'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+    }),*/
     new ExtractTextPlugin("[name].css")
   ],
 

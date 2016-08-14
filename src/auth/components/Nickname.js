@@ -1,3 +1,5 @@
+"use strict";
+
 import	React,	{	Component	}	from	'react'
 import	{	Link	}	from	'react-router'
 
@@ -6,7 +8,7 @@ export	default	class	Nickname	extends	Component	{
   onNickInputChange(e) {
     this.props.setNick(e.target.value);
   };
-  
+
   render()	{
     return	(
       <div>

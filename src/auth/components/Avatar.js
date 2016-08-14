@@ -3,13 +3,67 @@
 import	React,	{	Component	}	from	'react';
 import	{	Link	}	from	'react-router';
 import SkyLight from 'react-skylight';
+var NotificationSystem = require('react-notification-system');
 require('croppie');
 require('../../../node_modules/croppie/croppie.css');
 var avaUrl = require('../../default_ava.jpg');
 var cropImage = avaUrl;
 var croppieContainer;
+import 'whatwg-fetch';
 
 export	default	class	Avatar	extends	Component	{
+
+  _addNotifications(messages, level) {
+    messages.forEach(msg => {
+      this._notificationSystem.addNotification({
+        message: msg,
+        level: level
+      });
+    });
+  };
+
+  componentDidMount() {
+    this._notificationSystem = this.refs.notificationSystem;
+  };
+
+
+  signUpClick(e) {
+    let question = this.props.question == "Свой вопрос" ? this.props.yourQuestion : this.props.question
+
+    fetch(
+      '/auth',
+      {
+        method: 'post',
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          username: this.props.nick,
+          password: this.props.password,
+          passwordConfirmation: this.props.confirmation,
+          question: question,
+          answer: this.props.answer,
+          name: this.props.name,
+          resume: this.props.resume,
+          about: this.props.about,
+          avatar: this.props.avatar
+        })
+      }
+    )
+      .then(result => {
+        return result.json();
+      })
+      .then(result => {
+        if (result.errors) {
+          this._addNotifications(result.errors, 'error');
+        } else if (result.status == 'Registration Successful!'){
+          this._addNotifications(['Registration Successful!',], 'success');
+          setTimeout(()=>{
+            window.location = '/auth';
+          }, 3000);
+        }
+      });
+  };
 
   onAvaClick(e) {
     var avaClick = new Event('click');
@@ -45,6 +99,7 @@ export	default	class	Avatar	extends	Component	{
     croppieContainer.bind({url: cropImage});
   };
 
+
   resetAvatar() {
     this.props.setAvatar(undefined);
   }
@@ -65,7 +120,9 @@ export	default	class	Avatar	extends	Component	{
     }
 
     return	(
+
       <div>
+
         <p>Шаг 6/6: поставьте своё фото на аватар</p>
         <div id="avatar">
           <img
@@ -84,7 +141,7 @@ export	default	class	Avatar	extends	Component	{
           onChange={ ::this.onAvaChange }></input>
         <nav>
           <Link to='/about' className="left" >Назад</Link>
-          <a className="right">Вперёд!</a>
+          <a className="right" onClick = { ::this.signUpClick }>Вперёд!</a>
         </nav>
         <SkyLight
           hideOnOverlayClicked
@@ -98,6 +155,7 @@ export	default	class	Avatar	extends	Component	{
             onClick={ this.onCropConfirmClick.bind(this)}
             className="default-button">Обрезать</button>
         </SkyLight>
+        <NotificationSystem ref="notificationSystem" />
       </div>
     )
   }

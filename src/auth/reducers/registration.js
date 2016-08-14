@@ -9,7 +9,8 @@ import {
   SET_NAME,
   SET_RESUME,
   SET_ABOUT,
-  SET_AVATAR
+  SET_AVATAR,
+  REGISTRATION_FAIL
 } from '../constants/Registration'
 
 const initialState ={
@@ -51,6 +52,8 @@ export default function registration(state = initialState, action) {
       return { ...state, about: action.payload };
     case SET_AVATAR:
       return { ...state, avatar: action.payload}
+    case REGISTRATION_FAIL:
+      return { ...state, errors: action.errors}
     default:
       return state;
   }

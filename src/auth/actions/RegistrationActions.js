@@ -12,6 +12,7 @@ import {
   SET_AVATAR
 } from '../constants/Registration'
 
+import 'whatwg-fetch';
 
 export function setNick(nick) {
   return {
