@@ -1,3 +1,5 @@
+"use strict";
+
 import {
   SET_NICK,
   SET_PASSWORD,
@@ -11,8 +13,6 @@ import {
   SET_ABOUT,
   SET_AVATAR
 } from '../constants/Registration'
-
-import 'whatwg-fetch';
 
 export function setNick(nick) {
   return {

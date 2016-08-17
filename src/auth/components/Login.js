@@ -3,6 +3,7 @@
 import	React,	{	Component	}	from	'react'
 import	{	Link	}	from	'react-router'
 import 'whatwg-fetch';
+import cookie from 'react-cookie';
 
 export	default	class	Login	extends	Component	{
   onLoginInputChange(e) {
@@ -31,8 +32,8 @@ export	default	class	Login	extends	Component	{
         return result.json();
       })
       .then(result => {
-        alert(result.status);
-        if (result.status == 'Login Successful!'){
+        if (result.status == 'Login successful!'){
+          cookie.save('token', result.token, { path: '/' });
           window.location = '/';
         }
       });

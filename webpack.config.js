@@ -11,7 +11,8 @@ module.exports ={
     'babel-polyfill'
   ],
   entry: {
-    auth: __dirname + '/src/auth/index.js'
+    auth: __dirname + '/src/auth/index.js',
+    user: __dirname + '/src/user/index.js'
   },
   output: {
     path: __dirname + '/public',

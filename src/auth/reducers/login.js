@@ -1,3 +1,5 @@
+"use strict";
+
 import { SET_LOGIN, SET_PASSWORD } from '../constants/Login'
 
 const initialState ={

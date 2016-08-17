@@ -1,0 +1,13 @@
+extends layout
+
+block styles
+  link(rel='stylesheet', href='user.css')
+
+block content
+  div#root
+  script.
+    var user = !{JSON.stringify(user)};
+    var ava = !{JSON.stringify(ava)};
+    var userStatus = !{JSON.stringify(userStatus)};
+
+  script(src='user.js')

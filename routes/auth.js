@@ -1,12 +1,12 @@
 'use strict';
 
-var express = require('express');
-var router = express.Router();
-var passport = require('passport');
-var fs = require('fs');
-var User = require('../models/user');
+const express = require('express');
+const router = express.Router();
+const passport = require('passport');
+const fs = require('fs');
+const User = require('../models/user');
 const path = require('path');
-var Verify    = require('./verify');
+const Verify    = require('./verify');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -74,24 +74,22 @@ router.post('/', function(req, res) {
             return res.json({err: err});
           }
         } else {
-          var avatar = req.body.avatar;
-          console.log()
+          var avatar = req.body.avatar.replace(/^data:image\/png;base64,/, "");
           try {
             fs.mkdir(path.join(__dirname, `../public/${username}`), function(e){
-
+              if (avatar!=''){
+                var ava = new Buffer(avatar, 'base64');
+                fs.writeFile(path.join(__dirname, `../public/${username}/ava.png`),
+                  avatar,
+                  'base64', (e)=>{});
+              }
             });
-            if (avatar!=''){
-              var ava = new Buffer(avatar, 'base64');
-              fs.writeFile(path.join(__dirname, `../public/${username}/ava.png`));
-            }
           } catch (err){
 
           }
-          console.log('222');
         }
         passport.authenticate('local')(req, res, function () {
-          console.log('111');
-          return res.status(200).json({status: 'Registration Successful!'});
+          res.status(200).json({status: 'Registration Successful!'});
         });
       });
     }
@@ -115,7 +113,7 @@ router.post('/login', function(req, res, next) {
       }
 
       var token = Verify.getToken(user);
-              res.status(200).json({
+      res.status(200).json({
         status: 'Login successful!',
         success: true,
         token: token

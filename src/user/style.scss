@@ -1,0 +1,33 @@
+body {
+  background-color: #0ff;
+}
+
+#root>div {
+  width:700px;
+  margin: 20px auto;
+  aside {
+    width: 200px;
+    float: left;
+    background-color: yellow;
+    a {
+      display: block;
+      padding: 10px 0;
+      border-bottom: 1px solid black;
+      font-size: 20px;
+      text-decoration: none;
+      color: black;
+      background-color: gray;
+      &.active {
+        background-color: white;
+      }
+    }
+  }
+  main {
+    width: 500px;
+    min-height: 200px;
+    float: left;
+    background-color: white;
+  }
+}
+
+@import '../avatar.scss';

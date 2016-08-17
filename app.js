@@ -15,6 +15,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var routes = require('./routes/index');
 var auth = require('./routes/auth');
+var users = require('./routes/users')
 
 var url = `mongodb://localhost:${config.dbPort}/${config.dbName}`;
 mongoose.Promise = global.Promise;
@@ -44,9 +45,11 @@ app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb',extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/users/',express.static(__dirname+'/public'));
 
 app.use('/', routes);
 app.use('/auth', auth);
+app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

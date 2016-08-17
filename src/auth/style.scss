@@ -1,9 +1,4 @@
-@font-face {
-    font-family: 'GreatVibes-Regular';
-    src: url("./GreatVibes-Regular.ttf") format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
+@import '../fonts.scss';
 
 @mixin default-button {
   display: block;
@@ -77,9 +72,6 @@ body {
     height: 28px;
     font-size: 20px;
   }
-  input[type="file"] {
-    display: none;
-  }
   select {
     display: block;
     min-width: 70%;
@@ -119,22 +111,7 @@ body {
   display: none !important;
 }
 
-#avatar img{
-  display: block;
-  height: 100px;
-  width: 100px;
-  border-radius: 50px;
-  -webkit-border-radius: 50px;
-  -moz-border-radius: 50px;
-  border-image: none;
-  border: none;
-  margin: 20px auto;
-  &:active {
-    height: 96px;
-    width: 96px;
-    border: 2px solid #0ee;
-  }
-}
+@import '../avatar.scss';
 
 .minLink {
   text-align: center;

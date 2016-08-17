@@ -6,7 +6,7 @@ var Verify = require('./verify');
 
 router.route('/')
 .get(Verify.verifyOrdinaryUser, function(req, res, next) {
-  res.redirect('/auth');
+  res.redirect(`/users/${req.decoded._doc._id}`);
 });
 
 module.exports = router;

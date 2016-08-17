@@ -11,7 +11,6 @@ var User = new Schema({
     name: String,
     resume: String,
     about: String,
-    avatar: String,
     admin:   {
         type: Boolean,
         default: false

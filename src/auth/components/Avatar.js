@@ -5,7 +5,6 @@ import	{	Link	}	from	'react-router';
 import SkyLight from 'react-skylight';
 var NotificationSystem = require('react-notification-system');
 require('croppie');
-require('../../../node_modules/croppie/croppie.css');
 var avaUrl = require('../../default_ava.jpg');
 var cropImage = avaUrl;
 var croppieContainer;
@@ -65,11 +64,6 @@ export	default	class	Avatar	extends	Component	{
       });
   };
 
-  onAvaClick(e) {
-    var avaClick = new Event('click');
-    document.getElementById('avatar-input').dispatchEvent(avaClick);
-  };
-
   onAvaChange(e) {
     var files = e.target.files;
     if (files.length > 0) {
@@ -106,6 +100,10 @@ export	default	class	Avatar	extends	Component	{
 
   render()	{
 
+    var avaStyle = {
+      backgroundImage:  `url(${this.props.avatar == undefined ? avaUrl : this.props.avatar})`
+    };
+
     var cropDialogStyles = {
       position: 'absolute',
       minHeight: '430px'
@@ -122,23 +120,20 @@ export	default	class	Avatar	extends	Component	{
     return	(
 
       <div>
-
         <p>Шаг 6/6: поставьте своё фото на аватар</p>
-        <div id="avatar">
-          <img
-            src ={ src }
-            onClick = { ::this.onAvaClick }/>
+        <div id="avatar"
+          style= { avaStyle }>
+          <input
+            type="file"
+            name="avatar"
+            size="chars"
+            id="avatar-input"
+            onChange={ ::this.onAvaChange }></input>
         </div>
         <div
           className={ this.props.avatar ? 'minLink' : 'hidden' }
           onClick= {::this.resetAvatar } >
           <a>Очистить аватар</a></div>
-        <input
-          type="file"
-          name="avatar"
-          size="chars"
-          id="avatar-input"
-          onChange={ ::this.onAvaChange }></input>
         <nav>
           <Link to='/about' className="left" >Назад</Link>
           <a className="right" onClick = { ::this.signUpClick }>Вперёд!</a>
