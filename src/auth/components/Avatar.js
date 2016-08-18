@@ -69,13 +69,13 @@ export	default	class	Avatar	extends	Component	{
     if (files.length > 0) {
       var file = files[0];
       cropImage = URL.createObjectURL(file);
+      this.refs.avaDialog.show();
     }
-    this.refs.simpleDialog.show();
   };
 
   onCropConfirmClick(e) {
     var setAvatar = this.props.setAvatar;
-    var dialog = this.refs.simpleDialog;
+    var dialog = this.refs.avaDialog;
     croppieContainer.result({
       type: 'canvas',
       size: 'viewport',
@@ -140,7 +140,7 @@ export	default	class	Avatar	extends	Component	{
         </nav>
         <SkyLight
           hideOnOverlayClicked
-          ref="simpleDialog"
+          ref="avaDialog"
           dialogStyles={cropDialogStyles}
           afterOpen={this._executeAfterModalOpen}>
           <div

@@ -14,13 +14,13 @@ export	default	class	Main	extends	Component	{
     if (files.length > 0) {
       var file = files[0];
       cropImage = URL.createObjectURL(file);
+      this.refs.avaDialog.show();
     }
-    this.refs.simpleDialog.show();
   };
 
   onCropConfirmClick(e) {
     var setAvatar = this.props.setAvatar;
-    var dialog = this.refs.simpleDialog;
+    var dialog = this.refs.avaDialog;
     croppieContainer.result({
       type: 'canvas',
       size: 'viewport',
@@ -51,7 +51,7 @@ export	default	class	Main	extends	Component	{
     });
   }
 
-  _executeAfterModalOpen(){
+  _executeAfterModalAvaOpen(){
     croppieContainer = new Croppie(document.getElementById('cropImage'), {
         viewport: { width: 200, height: 200, type: 'circle' },
         showZoomer: false});
@@ -63,6 +63,41 @@ export	default	class	Main	extends	Component	{
     this.props.setAvatar(undefined);
   }
 
+  onNameClick(e) {
+    this.refs.nameDialog.show();
+  };
+
+  onNameInputChange(e) {
+    this.props.setName(e.target.value);
+  }
+
+  nameConfirm(e) {
+    fetch(
+      '/users/name',
+      {
+        method: 'post',
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          name: this.props.name,
+          token: cookie.load('token')
+        })
+      }
+    )
+      .then(result => {
+        return result.json();
+      })
+      .then(result => {
+        if (result.status == 'Name updated successfully!') {
+          this.props.setCachedName(this.props.name);
+        } else {
+          this.props.setName(this.props.nameCached);
+        }
+        this.refs.nameDialog.hide();
+      });
+  }
+
   render()	{
 
     var avaStyle = {
@@ -72,6 +107,10 @@ export	default	class	Main	extends	Component	{
     var cropDialogStyles = {
       position: 'absolute',
       minHeight: '430px'
+    };
+    var nameDialogStyles = {
+      position: 'absolute',
+      height: '150px'
     };
 
     return	(
@@ -86,17 +125,40 @@ export	default	class	Main	extends	Component	{
             onChange={ ::this.onAvaChange }
             disabled = { window.userStatus != 'owner' }></input>
         </div>
+        <h1
+          id="name"
+          onClick= { window.userStatus === 'owner' ? (::this.onNameClick) : ()=>{}}>
+          { this.props.nameCached === '' ? this.props.nick : this.props.nameCached}
+        </h1>
+        <h2 id="resume"> {this.props.resume} </h2>
+        <h3 className={ this.props.about === '' ? 'hidden' : '' }>Обо мне</h3>
+        <p> { this.props.about } </p>
         <SkyLight
           hideOnOverlayClicked
-          ref="simpleDialog"
+          ref="avaDialog"
           dialogStyles={cropDialogStyles}
-          afterOpen={this._executeAfterModalOpen}>
+          afterOpen={this._executeAfterModalAvaOpen}>
           <div
             id = 'cropImage'
             className = 'croppie-container'/>
           <button
             onClick={ this.onCropConfirmClick.bind(this)}
             className="default-button">Обрезать</button>
+        </SkyLight>
+        <SkyLight
+          hideOnOverlayClicked
+          ref="nameDialog"
+          dialogStyles={nameDialogStyles}>
+          Изменение имени ( если имя пустое, на странице будет показан никнейм)
+          <br />
+          <input
+            type='text'
+            id='name-input'
+            value = { this.props.name }
+            onChange = { ::this.onNameInputChange }/>
+          <button
+            onClick={ this.nameConfirm.bind(this)}
+            className="default-button">Изменить</button>
         </SkyLight>
       </div>
     )

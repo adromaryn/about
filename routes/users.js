@@ -26,12 +26,15 @@ router.get('/:id', function(req, res, next) {
         }
         if (token) {
           userStatus = Verify.verifyToken(token, req.params.id) ? "owner" : "guest";
+        } else {
+          userStatus = null;
         }
+        user.answer = undefined;
+        user.question = undefined;
         res.render('index', {user: user, userStatus: userStatus, ava: avatar});
       });
     }
   });
-  //
 });
 
 router.route('/avatar')
@@ -55,7 +58,26 @@ router.route('/avatar')
   } catch (err){
     res.status(500).json({status: 'Avatar not updated!'});
   }
-  //
+});
+
+router.route('/name')
+.post(Verify.verifyOrdinaryUser, function(req, res, next) {
+  User.findById(req.decoded._doc._id, function(err, u) {
+  if (!u) {
+    return res.status(500).json({status: 'Name not updated!'});
+  }
+  else {
+    u.name = req.body.name;
+
+    u.save(function(err) {
+      if (err) {
+        res.status(500).json({status: 'Name not updated!'});
+      }
+      else
+        res.status(200).json({status: 'Name updated successfully!'});
+    });
+  }
+  });
 });
 
 module.exports = router;

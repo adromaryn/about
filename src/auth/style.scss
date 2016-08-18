@@ -1,22 +1,6 @@
 @import '../fonts.scss';
 
-@mixin default-button {
-  display: block;
-  font-size: 20px;
-  text-align: center;
-  padding:5px;
-  background: #00f;
-  color: white;
-  text-decoration: none;
-  border: none;
-  border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  cursor: pointer;
-  &:active {
-    background-color: #00d;
-  }
-}
+@import "../common.scss";
 
 body {
   background-color: #00ffff;
@@ -107,10 +91,6 @@ body {
   }
 }
 
-.hidden {
-  display: none !important;
-}
-
 @import '../avatar.scss';
 
 .minLink {
@@ -122,6 +102,6 @@ body {
   }
 }
 
-.default-button {
-  @include default-button;
+.skylight-close-button {
+  color: black;
 }

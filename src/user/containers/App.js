@@ -18,9 +18,14 @@ export	default	class	App	extends	Component	{
         this.props.children,
         {
           nick: this.props.main.nick,
+          name: this.props.main.name,
+          nameCached: this.props.main.nameCached,
           resume: this.props.main.resume,
+          about: this.props.main.about,
           avatar: this.props.main.avatar,
-          setAvatar: this.props.mainActions.setAvatar
+          setAvatar: this.props.mainActions.setAvatar,
+          setName: this.props.mainActions.setName,
+          setCachedName: this.props.mainActions.setCachedName
         }
       )
     } else {
