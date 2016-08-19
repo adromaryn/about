@@ -14,7 +14,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res) {
-    console.log(req.body);
     let errors = [];
     let username = req.body.username;
     if (username == undefined || username == '') {
@@ -74,23 +73,24 @@ router.post('/', function(req, res) {
             return res.json({err: err});
           }
         } else {
-          var avatar = req.body.avatar.replace(/^data:image\/png;base64,/, "");
           try {
             fs.mkdir(path.join(__dirname, `../public/${username}`), function(e){
-              if (avatar!=''){
-                var ava = new Buffer(avatar, 'base64');
+              if (req.body.avatar) {
+                var avatar = req.body.avatar.replace(/^data:image\/png;base64,/, "");
                 fs.writeFile(path.join(__dirname, `../public/${username}/ava.png`),
                   avatar,
                   'base64', (e)=>{});
+              } else {
+                fs.unlink(path.join(__dirname, `../public/${username}/ava.png`), (e)=>{});
               }
             });
           } catch (err){
-
+            console.log(err);
           }
+          passport.authenticate('local')(req, res, function () {
+            res.status(200).json({status: 'Registration Successful!'});
+          });
         }
-        passport.authenticate('local')(req, res, function () {
-          res.status(200).json({status: 'Registration Successful!'});
-        });
       });
     }
 });

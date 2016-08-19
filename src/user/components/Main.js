@@ -7,6 +7,7 @@ var avaUrl = require('../../default_ava.jpg');
 var cropImage = avaUrl;
 var croppieContainer;
 import cookie from 'react-cookie';
+import 'whatwg-fetch';
 
 export	default	class	Main	extends	Component	{
   onAvaChange(e) {
@@ -59,9 +60,28 @@ export	default	class	Main	extends	Component	{
   };
 
 
-  resetAvatar() {
-    this.props.setAvatar(undefined);
-  }
+  clearAvatar() {
+    fetch(
+      '/users/avatar',
+      {
+        method: 'delete',
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          token: cookie.load('token')
+        })
+      }
+    )
+      .then(result => {
+        return result.json();
+      })
+      .then(result => {
+        if (result.status == 'Avatar deleted successfully!') {
+          this.props.setAvatar(undefined);
+        }
+      });
+  };
 
   onNameClick(e) {
     this.refs.nameDialog.show();
@@ -69,7 +89,7 @@ export	default	class	Main	extends	Component	{
 
   onNameInputChange(e) {
     this.props.setName(e.target.value);
-  }
+  };
 
   nameConfirm(e) {
     fetch(
@@ -86,6 +106,7 @@ export	default	class	Main	extends	Component	{
       }
     )
       .then(result => {
+        this.refs.nameDialog.hide();
         return result.json();
       })
       .then(result => {
@@ -94,9 +115,78 @@ export	default	class	Main	extends	Component	{
         } else {
           this.props.setName(this.props.nameCached);
         }
-        this.refs.nameDialog.hide();
       });
-  }
+  };
+
+  onResumeClick(e) {
+    this.refs.resumeDialog.show();
+  };
+
+  onResumeInputChange(e) {
+    this.props.setResume(e.target.value);
+  };
+
+  resumeConfirm(e) {
+    fetch(
+      '/users/resume',
+      {
+        method: 'post',
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          resume: this.props.resume,
+          token: cookie.load('token')
+        })
+      }
+    )
+      .then(result => {
+        this.refs.resumeDialog.hide();
+        return result.json();
+      })
+      .then(result => {
+        if (result.status == 'Resume updated successfully!') {
+          this.props.setCachedResume(this.props.resume);
+        } else {
+          this.props.setResume(this.props.resumeCached);
+        }
+      });
+  };
+
+  onAboutClick(e) {
+    this.refs.aboutDialog.show();
+  };
+
+  onAboutInputChange(e) {
+    this.props.setAbout(e.target.value);
+  };
+
+  aboutConfirm(e) {
+    fetch(
+      '/users/about',
+      {
+        method: 'post',
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          about: this.props.about,
+          token: cookie.load('token')
+        })
+      }
+    )
+      .then(result => {
+        this.refs.aboutDialog.hide();
+        return result.json();
+      })
+      .then(result => {
+        if (result.status == 'About updated successfully!') {
+          this.props.setCachedAbout(this.props.about);
+        } else {
+          this.props.setAbout(this.props.aboutCached);
+        }
+      });
+  };
 
   render()	{
 
@@ -106,11 +196,18 @@ export	default	class	Main	extends	Component	{
 
     var cropDialogStyles = {
       position: 'absolute',
-      minHeight: '430px'
+      minHeight: '430px',
+      minWidth: '500px'
     };
-    var nameDialogStyles = {
+    var textDialogStyles = {
       position: 'absolute',
-      height: '150px'
+      height: '150px',
+      minWidth: '500px'
+    };
+    var aboutDialogStyles = {
+      position: 'absolute',
+      height: '170px',
+      minWidth: '500px'
     };
 
     return	(
@@ -125,14 +222,34 @@ export	default	class	Main	extends	Component	{
             onChange={ ::this.onAvaChange }
             disabled = { window.userStatus != 'owner' }></input>
         </div>
+        <a
+          className = { window.userStatus === 'owner' && this.props.avatar ? 'minLink' : 'hidden' }
+          onClick= { window.userStatus === 'owner' ? (::this.clearAvatar) : ()=>{} }>
+          Удалить аватар
+        </a>
         <h1
           id="name"
           onClick= { window.userStatus === 'owner' ? (::this.onNameClick) : ()=>{}}>
           { this.props.nameCached === '' ? this.props.nick : this.props.nameCached}
         </h1>
-        <h2 id="resume"> {this.props.resume} </h2>
-        <h3 className={ this.props.about === '' ? 'hidden' : '' }>Обо мне</h3>
-        <p> { this.props.about } </p>
+        <h2
+          id="resume"
+          onClick= { window.userStatus === 'owner' ? (::this.onResumeClick) : ()=>{}}>
+          { this.props.resumeCached === '' ? '' : this.props.resumeCached}
+        </h2>
+        <a
+          className = { window.userStatus === 'owner' && this.props.resumeCached == '' ? 'minLink' : 'hidden' }
+          onClick= { window.userStatus === 'owner' ? (::this.onResumeClick) : ()=>{} }>
+          Добавить описание.
+        </a>
+        <div id='about-area'>
+          <p> { this.props.aboutCached } </p>
+          <a
+            className = { window.userStatus === 'owner' ? 'minLink' : 'hidden' }
+            onClick= { window.userStatus === 'owner' ? (::this.onAboutClick) : ()=>{} }>
+            { this.props.aboutCached == '' ? 'Добавить описание' : 'Изменить описание' }
+          </a>
+        </div>
         <SkyLight
           hideOnOverlayClicked
           ref="avaDialog"
@@ -148,8 +265,8 @@ export	default	class	Main	extends	Component	{
         <SkyLight
           hideOnOverlayClicked
           ref="nameDialog"
-          dialogStyles={nameDialogStyles}>
-          Изменение имени ( если имя пустое, на странице будет показан никнейм)
+          dialogStyles={textDialogStyles}>
+          Изменение имени ( если имя пустое, на странице будет показан никнейм).
           <br />
           <input
             type='text'
@@ -158,6 +275,35 @@ export	default	class	Main	extends	Component	{
             onChange = { ::this.onNameInputChange }/>
           <button
             onClick={ this.nameConfirm.bind(this)}
+            className="default-button">Изменить</button>
+        </SkyLight>
+        <SkyLight
+          hideOnOverlayClicked
+          ref="resumeDialog"
+          dialogStyles={textDialogStyles}>
+          Описание в "паре слов" своей деятельности.
+          <br />
+          <input
+            type='text'
+            id='resume-input'
+            value = { this.props.resume }
+            onChange = { ::this.onResumeInputChange }/>
+          <button
+            onClick={ this.resumeConfirm.bind(this)}
+            className="default-button">Изменить</button>
+        </SkyLight>
+        <SkyLight
+          hideOnOverlayClicked
+          ref="aboutDialog"
+          dialogStyles={aboutDialogStyles}>
+          Раздел "о себе".
+          <br />
+          <textarea
+            id='about-input'
+            value = { this.props.about }
+            onChange = { ::this.onAboutInputChange }/>
+          <button
+            onClick={ this.aboutConfirm.bind(this)}
             className="default-button">Изменить</button>
         </SkyLight>
       </div>

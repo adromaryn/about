@@ -8,10 +8,13 @@ var User = new Schema({
     password: String,
     question: String,
     answer: String,
-    name: String,
+    name: {
+        type: String,
+        default: ''
+    },
     resume: String,
     about: String,
-    admin:   {
+    admin:{
         type: Boolean,
         default: false
     }

@@ -1,12 +1,19 @@
 'use strict';
 
-var express = require('express');
-var router = express.Router();
-var Verify = require('./verify');
+const express = require('express');
+const router = express.Router();
+const Verify = require('./verify');
+const User = require('../models/user');
 
 router.route('/')
 .get(Verify.verifyOrdinaryUser, function(req, res, next) {
-  res.redirect(`/users/${req.decoded._doc._id}`);
+  User.findById(req.decoded._doc._id, function(err, u) {
+    if (!u) {
+      res.redirect(`/auth`);
+    } else {
+      res.redirect(`/users/${req.decoded._doc._id}`);
+    }
+  });
 });
 
 module.exports = router;

@@ -7,8 +7,31 @@ import	{	IndexLink , Link	}	from	'react-router'
 import	Main	from	'../components/Main'
 import	*	as	mainActions	from	'../actions/MainActions'
 import	*	as	contactsActions	from	'../actions/ContactsActions'
+import cookie from 'react-cookie';
+import 'whatwg-fetch';
 
 export	default	class	App	extends	Component	{
+
+  logOut() {
+    cookie.remove('token', { path: '/' });
+    fetch(
+      '/auth/logout',
+      {
+        method: 'get',
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      }
+    )
+      .then(() => {
+        window.location.href='/auth';
+      });
+  };
+
+  logIn() {
+    cookie.remove('token', { path: '/' });
+    window.location.href='/auth';
+  };
 
   render()	{
     var children;
@@ -21,11 +44,17 @@ export	default	class	App	extends	Component	{
           name: this.props.main.name,
           nameCached: this.props.main.nameCached,
           resume: this.props.main.resume,
+          resumeCached: this.props.main.resumeCached,
           about: this.props.main.about,
+          aboutCached: this.props.main.aboutCached,
           avatar: this.props.main.avatar,
           setAvatar: this.props.mainActions.setAvatar,
           setName: this.props.mainActions.setName,
-          setCachedName: this.props.mainActions.setCachedName
+          setCachedName: this.props.mainActions.setCachedName,
+          setResume: this.props.mainActions.setResume,
+          setCachedResume: this.props.mainActions.setCachedResume,
+          setAbout: this.props.mainActions.setAbout,
+          setCachedAbout: this.props.mainActions.setCachedAbout
         }
       )
     } else {
@@ -39,6 +68,12 @@ export	default	class	App	extends	Component	{
           <Link to='contacts' activeClassName='active'>Контакты</Link>
         </aside>
         <main>
+          <header>
+            <a
+              onClick={window.userStatus ? (::this.logOut) : ::this.logIn }>
+              {window.userStatus ? 'Logout' : 'Login'}
+            </a>
+          </header>
           { children }
         </main>
 			</div>
