@@ -1,3 +1,4 @@
+/*Example(use your own secret key)*/
 module.exports = {
   dbName: 'about',
   dbPort: 27017,

@@ -12,9 +12,15 @@ var User = new Schema({
         type: String,
         default: ''
     },
-    resume: String,
-    about: String,
-    admin:{
+    resume: {
+      type: String,
+      default: ''
+    },
+    about: {
+      type: String,
+      default: ''
+    },
+    admin: {
         type: Boolean,
         default: false
     }

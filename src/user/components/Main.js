@@ -281,7 +281,7 @@ export	default	class	Main	extends	Component	{
           hideOnOverlayClicked
           ref="resumeDialog"
           dialogStyles={textDialogStyles}>
-          Описание в "паре слов" своей деятельности.
+          Пару слов о своей деятельности.
           <br />
           <input
             type='text'
