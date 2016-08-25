@@ -40,10 +40,7 @@ export	default	class	Main	extends	Component	{
           }
         )
           .then(result => {
-            return result.json();
-          })
-          .then(result => {
-            if (result.status == 'Avatar updated successfully!') {
+            if (result.status == 200) {
               setAvatar(image);
             }
           });
@@ -74,10 +71,7 @@ export	default	class	Main	extends	Component	{
       }
     )
       .then(result => {
-        return result.json();
-      })
-      .then(result => {
-        if (result.status == 'Avatar deleted successfully!') {
+        if (result.status == 200 ) {
           this.props.setAvatar(undefined);
         }
       });
@@ -107,10 +101,7 @@ export	default	class	Main	extends	Component	{
     )
       .then(result => {
         this.refs.nameDialog.hide();
-        return result.json();
-      })
-      .then(result => {
-        if (result.status == 'Name updated successfully!') {
+        if (result.status == 200) {
           this.props.setCachedName(this.props.name);
         } else {
           this.props.setName(this.props.nameCached);
@@ -142,10 +133,7 @@ export	default	class	Main	extends	Component	{
     )
       .then(result => {
         this.refs.resumeDialog.hide();
-        return result.json();
-      })
-      .then(result => {
-        if (result.status == 'Resume updated successfully!') {
+        if (result.status == 200) {
           this.props.setCachedResume(this.props.resume);
         } else {
           this.props.setResume(this.props.resumeCached);
@@ -177,10 +165,7 @@ export	default	class	Main	extends	Component	{
     )
       .then(result => {
         this.refs.aboutDialog.hide();
-        return result.json();
-      })
-      .then(result => {
-        if (result.status == 'About updated successfully!') {
+        if (result.status == 200) {
           this.props.setCachedAbout(this.props.about);
         } else {
           this.props.setAbout(this.props.aboutCached);

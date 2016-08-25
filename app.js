@@ -8,14 +8,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var fs = require('fs');
 var app = express();
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var TelegramBot = require('node-telegram-bot-api');
+var redis = require('redis');
 
 var routes = require('./routes/index');
 var auth = require('./routes/auth');
-var users = require('./routes/users')
+var users = require('./routes/users');
 
 var url = `mongodb://localhost:${config.dbPort}/${config.dbName}`;
 mongoose.Promise = global.Promise;
@@ -25,6 +28,49 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
     // we're connected!
     console.log("Connected correctly to server");
+});
+
+var token = config.telegramBotToken;
+var bot = new TelegramBot(token, {polling: true});
+// Matches /echo [whatever]
+bot.onText(/\/start (.+)/, function (msg, match) {
+  var fromId = msg.from.id;
+  var username = msg.from.username;
+  var resp = match[1];
+  var client = redis.createClient();
+  client.on("error", function (err) {
+    console.log("Error " + err);
+  });
+
+  client.get(resp, function (err, reply) {
+    if (reply) {
+      client.del(resp);
+      var id = reply.toString();
+      if (resp.slice(0,3) === 'reg') {
+        User.findById(id, function(err, u) {
+          if (!u) {
+            bot.sendMessage(fromId, 'Пользователь не найден');
+          }
+          else {
+            u.telegram = username;
+
+            u.save(function(err) {
+              if (err) {
+                bot.sendMessage(fromId, 'Не удалось привязать аккаунт telegram');
+              }
+              else
+                bot.sendMessage(fromId, 'Аккаунт telegram успешно привязан');
+            });
+          }
+        });
+      } else {
+        bot.sendMessage(fromId, 'Неверная ссылка подтверждения');
+      }
+    } else {
+      bot.sendMessage(fromId, 'Ссылка невалидна (возможно, истёк срок действия)');
+    }
+    client.quit();
+  });
 });
 
 // view engine setup
@@ -45,7 +91,7 @@ app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb',extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/users/',express.static(__dirname+'/public'));
+app.use('/users/',express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/auth', auth);

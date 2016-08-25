@@ -6,6 +6,7 @@ const passport = require('passport');
 const fs = require('fs');
 const User = require('../models/user');
 const path = require('path');
+const crypto = require('crypto');
 const Verify    = require('./verify');
 
 /* GET home page. */
@@ -58,7 +59,7 @@ router.post('/', function(req, res) {
       res.json({"errors": errors});
     } else {
       User.register(new User({ username : username,
-        question: question,
+        question: crypto.createHash('md5').update(question).digest("hex"),
         answer: answer,
         name: name,
         resume: resume,

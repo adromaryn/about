@@ -89,7 +89,7 @@ module.exports ={
         loader: 'file?hash=sha512&digest=hex&name=[hash].[ext]'
       },
       {
-        test: /\.(png|woff|woff2|eot|ttf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.(woff|woff2|eot|ttf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'url-loader'
       }
     ]

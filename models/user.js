@@ -23,6 +23,10 @@ var User = new Schema({
     admin: {
         type: Boolean,
         default: false
+    },
+    telegram: {
+      type: String,
+      default: ''
     }
 });
 

@@ -1,6 +1,7 @@
-/*Example(use your own secret key)*/
+/*Example(use your own secret key and telegram bot)*/
 module.exports = {
   dbName: 'about',
   dbPort: 27017,
-  secretKey: '16427-00913-21408-73582'
+  secretKey: '11111-11111-11111-11111',
+  telegramBotToken: '111111111111111111111111111111111111111111111'
 }

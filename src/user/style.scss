@@ -92,3 +92,32 @@ header {
     content: '';
   }
 }
+
+
+#contacts {
+  font-style: italic;
+  .contact{
+    padding: 20px;
+    input {
+      margin: 10px 2px;
+      width: 100px;
+      height:16px;
+      font-size: 14px;
+    }
+    img {
+      width: 25px;
+      height: 25px;
+      margin-bottom: -5px;
+      margin-right: 5px;
+    }
+    a {
+      color: gray;
+    }
+    button {
+      color: white;
+      background-color: #00f;
+      border: 0;
+      margin-left: 5px;
+    }
+  }
+}

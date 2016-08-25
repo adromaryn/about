@@ -58,7 +58,13 @@ export	default	class	App	extends	Component	{
         }
       )
     } else {
-      children = this.props.children;
+      children = React.cloneElement(
+        this.props.children,
+        {
+          telegram: this.props.contacts.telegram,
+          setTelegram: this.props.contactsActions.setTelegram
+        }
+      )
     }
 
     return	(

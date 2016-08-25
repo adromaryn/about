@@ -10,8 +10,6 @@ import {
   SET_CACHED_ABOUT
 } from '../constants/Main'
 
-import 'whatwg-fetch';
-
 const initialState ={
   nick: window.user.username,
   name: window.user.name,

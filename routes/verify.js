@@ -31,16 +31,12 @@ exports.verifyOrdinaryUser = (req, res, next) => {
     }
 };
 
-exports.verifyToken = (token, id) => {
+exports.getUser = token => {
   try {
     var decoded = jwt.verify(token, config.secretKey);
   }
   catch(e) {
     return false;
   }
-  if (decoded._doc._id == id) {
-    return true;
-  } else {
-    return false;
-  }
+  return decoded._doc;
 }
