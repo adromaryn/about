@@ -45,24 +45,55 @@ bot.onText(/\/start (.+)/, function (msg, match) {
   client.get(resp, function (err, reply) {
     if (reply) {
       client.del(resp);
-      var id = reply.toString();
       if (resp.slice(0,3) === 'reg') {
+        var id = reply.toString();
         User.findById(id, function(err, u) {
           if (!u) {
             bot.sendMessage(fromId, 'Пользователь не найден');
           }
           else {
-            u.telegram = username;
+            User.findOne({ 'telegram': username }, (error, usr) => {
+              if (usr) {
+                usr.telegram = undefined;
+                usr.save(function(err) {
+                  if (!err) {
+                    bot.sendMessage(fromId, 'Аккаунт telegram отвязан от другой учётной записи');
+                    u.telegram = username;
 
-            u.save(function(err) {
-              if (err) {
-                bot.sendMessage(fromId, 'Не удалось привязать аккаунт telegram');
+                    u.save(function(err) {
+                      if (err) {
+                        bot.sendMessage(fromId, 'Не удалось привязать аккаунт telegram');
+                      }
+                      else
+                        bot.sendMessage(fromId, 'Аккаунт telegram успешно привязан');
+                    });
+                  } else {
+                    bot.sendMessage(fromId, 'Не удалось привязать аккаунт telegram');
+                  }
+                });
+              } else {
+                u.telegram = username;
+                console.log(u);
+
+                u.save(function(err) {
+                  if (err) {
+                    bot.sendMessage(fromId, 'Не удалось привязать аккаунт telegram');
+                  }
+                  else
+                    bot.sendMessage(fromId, 'Аккаунт telegram успешно привязан');
+                });
               }
-              else
-                bot.sendMessage(fromId, 'Аккаунт telegram успешно привязан');
             });
           }
         });
+      } else if (resp.slice(0,3) === 'ath') {
+        if (reply === '_') {
+          client.set(resp, `_${username}`);
+          client.expire(resp, 300);
+          bot.sendMessage(fromId, 'Авторизация подтверждена');
+        } else {
+          bot.sendMessage(fromId, 'Авторизация отклонена');
+        }
       } else {
         bot.sendMessage(fromId, 'Неверная ссылка подтверждения');
       }

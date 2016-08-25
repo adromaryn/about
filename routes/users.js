@@ -159,7 +159,8 @@ router.route('/contacts/telegram/reg')
       res.status(500).json({});
     }
     else {
-      u.telegram = '';
+      u.telegram = undefined;
+      console.log(u.telegram);
       u.save(function(err) {
         if (err)
           res.status(500).json({status: 'no'});

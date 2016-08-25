@@ -2,6 +2,8 @@
 
 @import "../common.scss";
 
+@import '../avatar.scss';
+
 body {
   background-color: #00ffff;
   color: white;
@@ -91,8 +93,6 @@ body {
   }
 }
 
-@import '../avatar.scss';
-
 .minLink {
   text-align: center;
   margin:20px auto;
@@ -104,4 +104,22 @@ body {
 
 .skylight-close-button {
   color: black;
+}
+
+.log-in-icons {
+  max-width: 70%;
+  margin: auto;
+  span {
+    font-weight: bold;
+  }
+  a, img {
+    width: 40px;
+    height: 40px;
+    margin: 10px 5px -15px;
+    border: 1px solid white;
+    border-radius: 20px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -ms-border-radius: 20px;
+  }
 }

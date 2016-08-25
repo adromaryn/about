@@ -2,7 +2,7 @@
 
 import	React,	{	Component	}	from	'react';
 import	{	Link	}	from	'react-router';
-const tgIcon = require('../telegram.png');
+const tgIcon = require('../../telegram.png');
 import cookie from 'react-cookie';
 import 'whatwg-fetch';
 
@@ -24,6 +24,8 @@ export	default	class	Contacts	extends	Component	{
       .then(result => {
         if (result.status == 200){
           this.props.setTelegram('');
+        } else {
+          window.location.href = '/';
         }
       });
   }
@@ -45,7 +47,7 @@ export	default	class	Contacts	extends	Component	{
         if (result.status == 200){
           return result.json();
         } else {
-          return null;
+          window.location.href = '/';
         }
       })
       .then(result => {

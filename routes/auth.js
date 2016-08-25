@@ -7,7 +7,8 @@ const fs = require('fs');
 const User = require('../models/user');
 const path = require('path');
 const crypto = require('crypto');
-const Verify    = require('./verify');
+const Verify = require('./verify');
+const redis = require('redis');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -128,6 +129,79 @@ router.get('/logout', function(req, res) {
   res.status(200).json({
     status: 'Bye!'
   });
+});
+
+router.route('/telegram')
+.post((req, res, next) => {
+  var client = redis.createClient();
+  var token = crypto.randomBytes(15).toString('base64').replace(/\//g,'_').replace(/\+/g,'-');
+  client.on("error", function (err) {
+    console.log("Error " + err);
+  });
+  client.set(`ath${token}`, '_' );
+  client.expire(`ath${token}`, 300);
+  client.quit();
+  res.status(200).json({token: `ath${token}`});
+});
+
+router.route('/telegram/:pas')
+.get((req, res, next) => {
+  var client = redis.createClient();
+  client.on("error", function (err) {
+    console.log("Error " + err);
+  });
+  var token = req.params.pas;
+  var timeoutId = setTimeout(()=>{
+    clearInterval(intervalId);
+    client.quit();
+    try {
+      res.status(401).json({});
+    } catch (err) {
+    }
+  }, 300000);
+  var intervalId = setInterval(()=>{
+    client.get(token, function (err, reply) {
+      if (!reply) {
+        clearTimeout(timeoutId);
+        client.quit();
+        try {
+          res.status(401).json({});
+        } catch(e) {
+        }
+      } else if (reply.length > 1 && reply[0] == '_') {
+        clearTimeout(timeoutId);
+        client.quit();
+        var telegram = reply.slice(1, reply.length);
+        User.findOne({ 'telegram': telegram }, (err, user) => {
+          if (!user) {
+            try {
+              res.status(401).json({});
+            } catch(e) {
+            }
+          } else {
+            req.logIn(user, function(err) {
+              if (err) {
+                try {
+                  res.status(401).json({});
+                } catch(e) {
+                }
+              } else {
+                var tkn = Verify.getToken(user);
+                try {
+                  res.status(200).json({
+                    status: 'Login successful!',
+                    success: true,
+                    token: tkn
+                  });
+                } catch(e) {
+                }
+              }
+            });
+          }
+        });
+      }
+    });
+  },1000);
 });
 
 module.exports = router;

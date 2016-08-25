@@ -4,10 +4,20 @@ var passportLocalMongoose = require('passport-local-mongoose');
 mongoose.Promise = global.Promise;
 
 var User = new Schema({
-    username: String,
+    username: {
+      type: String,
+      index: { unique: true },
+      required: true
+    },
     password: String,
-    question: String,
-    answer: String,
+    question: {
+      type: String,
+      required: true
+    },
+    answer: {
+      type: String,
+      required: true
+    },
     name: {
         type: String,
         default: ''
@@ -26,7 +36,9 @@ var User = new Schema({
     },
     telegram: {
       type: String,
-      default: ''
+      default: '',
+      index: { unique: true },
+      sparse: true
     }
 });
 
