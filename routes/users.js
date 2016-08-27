@@ -209,6 +209,7 @@ router.route('/contacts/telegram/:pas')
                 }
               }
             });
+            clearInterval(intervalId);
           }
         });
       },1000);

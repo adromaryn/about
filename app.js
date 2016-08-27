@@ -73,7 +73,6 @@ bot.onText(/\/start (.+)/, function (msg, match) {
                 });
               } else {
                 u.telegram = username;
-                console.log(u);
 
                 u.save(function(err) {
                   if (err) {

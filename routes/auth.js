@@ -168,6 +168,7 @@ router.route('/telegram/:pas')
           res.status(401).json({});
         } catch(e) {
         }
+        clearInterval(intervalId);
       } else if (reply.length > 1 && reply[0] == '_') {
         clearTimeout(timeoutId);
         client.quit();
@@ -199,6 +200,7 @@ router.route('/telegram/:pas')
             });
           }
         });
+        clearInterval(intervalId);
       }
     });
   },1000);
