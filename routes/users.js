@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
-const Verify    = require('./verify');
+const Verify = require('./verify');
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
@@ -41,7 +41,7 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.route('/avatar')
-.post(Verify.verifyOrdinaryUser, function(req, res, next) {
+.post(Verify.verifyOrdinaryUser, (req, res, next) => {
   var avatar = req.body.avatar.replace(/^data:image\/png;base64,/, "");
   try {
     fs.mkdir(path.join(__dirname, `../public/${req.decoded._doc.username}`), (e)=>{
@@ -74,8 +74,8 @@ router.route('/avatar')
 });
 
 router.route('/name')
-.post(Verify.verifyOrdinaryUser, function(req, res, next) {
-  User.findById(req.decoded._doc._id, function(err, u) {
+.post(Verify.verifyOrdinaryUser, (req, res, next) => {
+  User.findById(req.decoded._doc._id, (err, u) => {
     if (!u) {
       res.status(500).json({status: 'Name not updated!'});
     }
@@ -94,15 +94,15 @@ router.route('/name')
 });
 
 router.route('/resume')
-.post(Verify.verifyOrdinaryUser, function(req, res, next) {
-  User.findById(req.decoded._doc._id, function(err, u) {
+.post(Verify.verifyOrdinaryUser, (req, res, next) => {
+  User.findById(req.decoded._doc._id, (err, u) => {
     if (!u) {
       res.status(500).json({status: 'Resume not updated!'});
     }
     else {
       u.resume = req.body.resume;
 
-      u.save(function(err) {
+      u.save(err => {
         if (err) {
           res.status(500).json({status: 'Resume not updated!'});
         }
@@ -114,15 +114,15 @@ router.route('/resume')
 });
 
 router.route('/about')
-.post(Verify.verifyOrdinaryUser, function(req, res, next) {
-  User.findById(req.decoded._doc._id, function(err, u) {
+.post(Verify.verifyOrdinaryUser, (req, res, next) => {
+  User.findById(req.decoded._doc._id, (err, u) => {
     if (!u) {
       res.status(500).json({status: 'About not updated!'});
     }
     else {
       u.about = req.body.about;
 
-      u.save(function(err) {
+      u.save(err => {
         if (err) {
           res.status(500).json({status: 'About not updated!'});
         }
@@ -134,8 +134,8 @@ router.route('/about')
 });
 
 router.route('/contacts/telegram/reg')
-.post(Verify.verifyOrdinaryUser, function(req, res, next) {
-  User.findById(req.decoded._doc._id, function(err, u) {
+.post(Verify.verifyOrdinaryUser, (req, res, next) => {
+  User.findById(req.decoded._doc._id, (err, u) => {
     if (!u) {
       res.status(500).json({});
     }
@@ -153,15 +153,15 @@ router.route('/contacts/telegram/reg')
   });
 })
 
-.delete(Verify.verifyOrdinaryUser, function(req, res, next) {
-  User.findById(req.decoded._doc._id, function(err, u) {
+.delete(Verify.verifyOrdinaryUser, (req, res, next) => {
+  User.findById(req.decoded._doc._id, (err, u) => {
     if (!u) {
       res.status(500).json({});
     }
     else {
       u.telegram = undefined;
       console.log(u.telegram);
-      u.save(function(err) {
+      u.save((err) => {
         if (err)
           res.status(500).json({status: 'no'});
         else
@@ -172,14 +172,14 @@ router.route('/contacts/telegram/reg')
 });
 
 router.route('/contacts/telegram/:pas')
-.get(Verify.verifyOrdinaryUser, function(req, res, next) {
-  User.findById(req.decoded._doc._id, function(err, u) {
+.get(Verify.verifyOrdinaryUser, (req, res, next) => {
+  User.findById(req.decoded._doc._id, (err, u) => {
     if (!u) {
       res.status(500).json({});
     }
     else {
       var client = redis.createClient();
-      client.on("error", function (err) {
+      client.on("error", err => {
         console.log("Error " + err);
       });
       var token = req.params.pas;
@@ -192,11 +192,11 @@ router.route('/contacts/telegram/:pas')
         }
       }, 300000);
       var intervalId = setInterval(()=>{
-        client.get(token, function (err, reply) {
+        client.get(token, (err, reply) => {
           if (! reply) {
             clearTimeout(timeoutId);
             client.quit();
-            User.findById(req.decoded._doc._id, function(err, usr) {
+            User.findById(req.decoded._doc._id, (err, usr) => {
               if (!usr) {
                 try {
                   res.status(500).json({});

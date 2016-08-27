@@ -3,6 +3,17 @@ var Schema = mongoose.Schema;
 var passportLocalMongoose = require('passport-local-mongoose');
 mongoose.Promise = global.Promise;
 
+var Project = new Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  about: {
+    type: String,
+    required: true
+  }
+});
+
 var User = new Schema({
     username: {
       type: String,
@@ -39,7 +50,8 @@ var User = new Schema({
       default: '',
       index: { unique: true },
       sparse: true
-    }
+    },
+    projects: [ Project ]
 });
 
 User.plugin(passportLocalMongoose);

@@ -5,10 +5,13 @@ import	{	bindActionCreators	}	from	'redux'
 import	{	connect	}	from	'react-redux'
 import	{	IndexLink , Link	}	from	'react-router'
 import	Main	from	'../components/Main'
+import Contacts from '../components/Contacts'
 import	*	as	mainActions	from	'../actions/MainActions'
 import	*	as	contactsActions	from	'../actions/ContactsActions'
+import	*	as	newProjectActions	from	'../actions/NewProjectsActions'
 import cookie from 'react-cookie';
 import 'whatwg-fetch';
+const addIco = require('../add.png')
 
 export	default	class	App	extends	Component	{
 
@@ -57,12 +60,22 @@ export	default	class	App	extends	Component	{
           setCachedAbout: this.props.mainActions.setCachedAbout
         }
       )
-    } else {
+    } else if (this.props.children.type === Main) {
       children = React.cloneElement(
         this.props.children,
         {
           telegram: this.props.contacts.telegram,
           setTelegram: this.props.contactsActions.setTelegram
+        }
+      )
+    } else {
+      children = React.cloneElement(
+        this.props.children,
+        {
+          title: this.props.newProject.title,
+          content: this.props.newProject.content,
+          setTitle: this.props.newProjectActions.setTitle,
+          setContent: this.props.newProjectActions.setContent
         }
       )
     }
@@ -72,6 +85,11 @@ export	default	class	App	extends	Component	{
         <aside>
           <IndexLink to='/' activeClassName='active'>Профиль</IndexLink>
           <Link to='contacts' activeClassName='active'>Контакты</Link>
+          <Link to='new'
+            activeClassName='active'>
+              <img src={addIco} />
+              <span>Добавить проект</span>
+          </Link>
         </aside>
         <main>
           <header>
@@ -90,14 +108,16 @@ export	default	class	App	extends	Component	{
 function mapStateToProps(state) {
   return {
     main: state.main,
-    contacts: state.contacts
+    contacts: state.contacts,
+    newProject: state.newProject
   }
 }
 
 function mapDispatchToProps(dispath) {
   return {
     mainActions: bindActionCreators(mainActions, dispath),
-    contactsActions: bindActionCreators(contactsActions, dispath)
+    contactsActions: bindActionCreators(contactsActions, dispath),
+    newProjectActions: bindActionCreators(newProjectActions, dispath)
   }
 }
 

@@ -21,6 +21,9 @@ body {
       text-decoration: none;
       color: black;
       background-color: gray;
+      span {
+        margin-left: 5px;
+      }
       &.active {
         background-color: white;
       }
@@ -119,5 +122,15 @@ header {
       border: 0;
       margin-left: 5px;
     }
+  }
+}
+
+#new-project {
+  input {
+    width: 450px;
+  }
+  textarea {
+    width: 450px;
+    height: 200px;
   }
 }

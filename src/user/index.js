@@ -8,6 +8,7 @@ import	{	Router,	Route,	IndexRoute,	hashHistory	}	from	'react-router'
 import	App	from	'./containers/App'
 import	Main	from	'./components/Main'
 import	Contacts	from	'./components/Contacts'
+import	NewProject	from	'./components/NewProject'
 import	configureStore	from	'./store/configureStore'
 require('./style.scss')
 
@@ -20,6 +21,7 @@ render (
         <IndexRoute
           component={Main}/>
         <Route path='contacts' component={Contacts} />
+        <Route path='new' component={NewProject} />
       </Route>
     </Router>
   </Provider>,
