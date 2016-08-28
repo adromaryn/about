@@ -2,12 +2,14 @@
 
 import {
   SET_TITLE,
-  SET_CONTENT
-} from '../constants/NewProject'
+  SET_CONTENT,
+  SET_PROJECTS
+} from '../constants/Projects'
 
 const initialState ={
   title: '',
   content: '',
+  projects: window.user.projects
 }
 
 export default function newProject(state = initialState, action) {
@@ -16,6 +18,8 @@ export default function newProject(state = initialState, action) {
       return { ...state, title: action.payload };
     case SET_CONTENT:
       return { ...state, content: action.payload };
+    case SET_PROJECTS:
+      return { ...state, projects: action.payload };
     default:
       return state;
   }

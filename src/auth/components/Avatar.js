@@ -3,12 +3,12 @@
 import	React,	{	Component	}	from	'react';
 import	{	Link	}	from	'react-router';
 import SkyLight from 'react-skylight';
-var NotificationSystem = require('react-notification-system');
+const NotificationSystem = require('react-notification-system');
 require('croppie');
-var avaUrl = require('../../default_ava.jpg');
+import 'whatwg-fetch';
+const avaUrl = require('../../default_ava.jpg');
 var cropImage = avaUrl;
 var croppieContainer;
-import 'whatwg-fetch';
 
 export	default	class	Avatar	extends	Component	{
 
@@ -56,7 +56,7 @@ export	default	class	Avatar	extends	Component	{
         if (result.errors) {
           this._addNotifications(result.errors, 'error');
         } else if (result.status == 'Registration Successful!'){
-          this._addNotifications(['Registration Successful!',], 'success');
+          this._addNotifications(['Вы зарегистрированы!',], 'success');
           setTimeout(()=>{
             window.location = '/auth';
           }, 3000);

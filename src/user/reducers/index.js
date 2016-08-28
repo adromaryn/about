@@ -3,10 +3,10 @@
 import { combineReducers } from 'redux'
 import main from './main'
 import contacts from './contacts'
-import newProject from './newProject'
+import projects from './projects'
 
 export default combineReducers({
   main,
   contacts,
-  newProject
+  projects
 })

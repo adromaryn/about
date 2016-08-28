@@ -8,7 +8,7 @@ var Project = new Schema({
     type: String,
     required: true
   },
-  about: {
+  content: {
     type: String,
     required: true
   }

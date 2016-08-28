@@ -8,12 +8,12 @@ import	Main	from	'../components/Main'
 import Contacts from '../components/Contacts'
 import	*	as	mainActions	from	'../actions/MainActions'
 import	*	as	contactsActions	from	'../actions/ContactsActions'
-import	*	as	newProjectActions	from	'../actions/NewProjectsActions'
+import	*	as	projectsActions	from	'../actions/ProjectsActions'
 import cookie from 'react-cookie';
 import 'whatwg-fetch';
 const addIco = require('../add.png')
 
-export	default	class	App	extends	Component	{
+class	App	extends	Component	{
 
   logOut() {
     cookie.remove('token', { path: '/' });
@@ -60,7 +60,7 @@ export	default	class	App	extends	Component	{
           setCachedAbout: this.props.mainActions.setCachedAbout
         }
       )
-    } else if (this.props.children.type === Main) {
+    } else if (this.props.children.type === Contacts) {
       children = React.cloneElement(
         this.props.children,
         {
@@ -72,13 +72,27 @@ export	default	class	App	extends	Component	{
       children = React.cloneElement(
         this.props.children,
         {
-          title: this.props.newProject.title,
-          content: this.props.newProject.content,
-          setTitle: this.props.newProjectActions.setTitle,
-          setContent: this.props.newProjectActions.setContent
+          title: this.props.projects.title,
+          content: this.props.projects.content,
+          projects: this.props.projects.projects,
+          setTitle: this.props.projectsActions.setTitle,
+          setContent: this.props.projectsActions.setContent,
+          setProjects: this.props.projectsActions.setProjects
         }
       )
     }
+
+    var projectsItems = this.props.projects.projects.map((item, index) => {
+      return (
+        <div key = { index }>
+          <Link
+            to= {`project/${index}`}
+            activeClassName='active' >
+            Проект: {item.title}
+          </Link>
+        </div>
+      )
+    });
 
     return	(
       <div>
@@ -86,10 +100,12 @@ export	default	class	App	extends	Component	{
           <IndexLink to='/' activeClassName='active'>Профиль</IndexLink>
           <Link to='contacts' activeClassName='active'>Контакты</Link>
           <Link to='new'
-            activeClassName='active'>
+            activeClassName='active'
+            className = { window.userStatus === 'owner' ? '' : 'hidden'}>
               <img src={addIco} />
               <span>Добавить проект</span>
           </Link>
+          {projectsItems}
         </aside>
         <main>
           <header>
@@ -109,7 +125,7 @@ function mapStateToProps(state) {
   return {
     main: state.main,
     contacts: state.contacts,
-    newProject: state.newProject
+    projects: state.projects
   }
 }
 
@@ -117,7 +133,7 @@ function mapDispatchToProps(dispath) {
   return {
     mainActions: bindActionCreators(mainActions, dispath),
     contactsActions: bindActionCreators(contactsActions, dispath),
-    newProjectActions: bindActionCreators(newProjectActions, dispath)
+    projectsActions: bindActionCreators(projectsActions, dispath)
   }
 }
 

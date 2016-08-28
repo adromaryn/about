@@ -9,6 +9,7 @@ import	App	from	'./containers/App'
 import	Main	from	'./components/Main'
 import	Contacts	from	'./components/Contacts'
 import	NewProject	from	'./components/NewProject'
+import	Project	from	'./components/Project'
 import	configureStore	from	'./store/configureStore'
 require('./style.scss')
 
@@ -22,6 +23,7 @@ render (
           component={Main}/>
         <Route path='contacts' component={Contacts} />
         <Route path='new' component={NewProject} />
+        <Route path='project/:project' component={Project} />
       </Route>
     </Router>
   </Provider>,

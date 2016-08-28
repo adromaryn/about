@@ -1,24 +1,25 @@
 'use strict';
 
-var config = require('./server.config.js')
+const config = require('./server.config.js')
 
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var fs = require('fs');
-var app = express();
-var mongoose = require('mongoose');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var TelegramBot = require('node-telegram-bot-api');
-var redis = require('redis');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+const app = express();
+const mongoose = require('mongoose');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const TelegramBot = require('node-telegram-bot-api');
+const redis = require('redis');
 
-var routes = require('./routes/index');
-var auth = require('./routes/auth');
-var users = require('./routes/users');
+const routes = require('./routes/index');
+const auth = require('./routes/auth');
+const users = require('./routes/users');
+const projects = require('./routes/projects');
 
 var url = `mongodb://localhost:${config.dbPort}/${config.dbName}`;
 mongoose.Promise = global.Promise;
@@ -126,6 +127,7 @@ app.use('/users/',express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/auth', auth);
 app.use('/users', users);
+app.use('/projects', projects);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

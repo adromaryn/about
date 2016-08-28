@@ -8,7 +8,7 @@ import	Login	from	'../components/Login'
 import	*	as	loginActions	from	'../actions/LoginActions'
 import	*	as	registrationActions	from	'../actions/RegistrationActions'
 
-export	default	class	App	extends	Component	{
+class	App	extends	Component	{
 
   render()	{
 
