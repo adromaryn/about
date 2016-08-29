@@ -19,6 +19,30 @@ export	default	class	Project	extends	Component	{
     this._notificationSystem = this.refs.notificationSystem;
   };
 
+  deleteProject(e) {
+    fetch(
+      `/projects/${this.props.params.project}`,
+      {
+        method: 'delete',
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+          token: cookie.load('token'),
+          title: this.props.title,
+          content: this.props.content
+        })
+      }
+    )
+      .then(result => {
+        if (result.status === 200) {
+          let p = this.props.projects;
+          p.splice(this.props.params.project, 1);
+          this.props.setProjects(p);
+        }
+      })
+  }
+
   render()	{
     var project = (this.props.projects)[this.props.params.project];
     var title = project.title;
@@ -27,6 +51,13 @@ export	default	class	Project	extends	Component	{
       <div id="project">
         <h2>{ title }</h2>
         { content }
+        <br />
+        <a
+          href='#'
+          className = {window.userStatus === 'owner' ? '' : 'hidden'}
+          onClick={ ::this.deleteProject }>
+          Удалить проект
+        </a>
         <NotificationSystem ref="notificationSystem" />
       </div>
     )

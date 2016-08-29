@@ -181,18 +181,21 @@ export	default	class	Main	extends	Component	{
 
     var cropDialogStyles = {
       position: 'absolute',
+      left: '25%',
       minHeight: '430px',
-      minWidth: '500px'
+      width: '470px'
     };
     var textDialogStyles = {
       position: 'absolute',
+      left: '25%',
       height: '150px',
-      minWidth: '500px'
+      width: '470px'
     };
     var aboutDialogStyles = {
       position: 'absolute',
+      left: '25%',
       height: '170px',
-      minWidth: '500px'
+      width: '470px'
     };
 
     return	(

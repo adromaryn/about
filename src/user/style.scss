@@ -30,6 +30,7 @@ body {
     }
   }
   main {
+    position: relative;
     width: 480px;
     min-height: 600px;
     float: left;
@@ -66,6 +67,12 @@ body {
       .minLink {
         text-align: left;
       }
+    }
+    .author {
+      position: absolute;
+      color: black;
+      font-size: 10px;
+      bottom: 5px;
     }
   }
 }
@@ -132,5 +139,12 @@ header {
   textarea {
     width: 450px;
     height: 200px;
+  }
+}
+
+#project {
+  a {
+    color: black;
+    font-size: 12px;
   }
 }

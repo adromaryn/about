@@ -115,6 +115,12 @@ class	App	extends	Component	{
             </a>
           </header>
           { children }
+          <a
+            href = 'https://github.com/adromaryn'
+            className = 'author minLink'
+            target = '_blank'>
+            Yakugo, 2016, by adromaryn (Igor Frolov)
+          </a>
         </main>
 			</div>
 		)

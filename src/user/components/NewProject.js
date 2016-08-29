@@ -35,12 +35,14 @@ export	default	class	NewProject extends	Component	{
       }
     )
       .then(result => {
-        if (result.status == 200) {
+        if (result.status === 200) {
           this.props.setTitle('');
           this.props.setContent('');
           return result.json();
-        }
-        else if (result.status == 400) {
+        } else if (result.status === 422) {
+          this._addNotification('Достигнут максимум проектов', 'error');
+          return null;
+        } else if (result.status === 400) {
           this._addNotification('Заголовок и описание проекта не могут быть пустыми', 'error');
           return null;
         } else {
